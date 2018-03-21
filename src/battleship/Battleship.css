@@ -1,0 +1,69 @@
+/* 
+    Created on : Mar 20, 2018, 1:33:46 PM
+    Author     : User
+*/
+
+.root {
+    -fx-background-color: #dddde3;
+}
+
+.button{
+    -fx-pref-width: 48;
+    -fx-pref-height: 48;
+    -fx-font-size: 12px;
+    -fx-text-fill: #333;
+}
+
+.unused {
+    
+    -fx-background-color: #fff;
+}
+
+.unused:hover {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-image: url("target.png");
+}
+
+.used {
+    -fx-background-color: #aaa;
+}
+
+.used:hover {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-image: url("Untitled.png");
+}
+
+.hit {
+    -fx-background-color: #8f8;
+}
+
+.hit:hover {
+    -fx-background-color: #7e7;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    
+}
+
+.miss {
+    -fx-background-color: #f88;
+}
+
+.miss:hover {
+    -fx-background-color: #e77;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    
+}
+
+.broken {
+    -fx-background-color: #88f;
+}
+
+.broken:hover {
+    -fx-background-color: #77e;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    
+}
