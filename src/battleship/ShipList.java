@@ -8,7 +8,7 @@ import java.util.HashMap;
  * @author User
  */
 public class ShipList {
-    HashMap<String, Ship> ships; 
+    HashMap<String, Ship> ships;
 
     public ShipList() {
         ships = new HashMap<>();

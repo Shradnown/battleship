@@ -1,0 +1,36 @@
+
+/* 
+    Created on : Mar 22, 2018, 12:53:23 PM
+    Author     : User
+*/
+.root {
+    
+}
+
+.button {
+    -fx-pref-width: 36;
+    -fx-pref-height: 36;
+    -fx-background-color: #fff;
+    
+}.button:hover {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+.used {
+    -fx-background-color: #9aa;
+}
+
+.aihit {
+    -fx-background-color: #8f8;
+    -fx-effect: innershadow(three-pass-box, rgba(0,0,0,0.7), 6, 0.0, 0, 2)
+}
+
+.aimiss {
+    -fx-background-color: #f88;
+    -fx-effect: innershadow(three-pass-box, rgba(0,0,0,0.7), 6, 0.0, 0, 2)
+}
+.aisunk {
+    -fx-background-color: #88f;
+    -fx-effect: innershadow(three-pass-box, rgba(0,0,0,0.7), 6, 0.0, 0, 2)
+}

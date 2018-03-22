@@ -72,7 +72,7 @@ public class Battleship extends Application {
         aiGrid.setHgap(10);
         aiGrid.setVgap(10);
         aiGrid.setPadding(new Insets(25, 25, 25, 25));
-        aiGrid.getStylesheets().add(Battleship.class.getResource("Battleship.css").toExternalForm());
+        aiGrid.getStylesheets().add(Battleship.class.getResource("AI.css").toExternalForm());
         
         for (int r = 0; r < 10; r++) {
             char column = 'A';
@@ -84,9 +84,9 @@ public class Battleship extends Application {
                 if(aiBoard.hasShipAt(squareID)) {
                     aiButton.getStyleClass().add("used");
                 }
-                else {
-                    aiButton.getStyleClass().add("ai");
-                }
+                
+                aiButton.setOnMouseEntered((MouseEvent e) -> aiButton.setText(squareID));
+                aiButton.setOnMouseExited((MouseEvent e) -> aiButton.setText(""));
                 aiGrid.add(aiButton,c,r);
                 column++;
             }
@@ -128,7 +128,7 @@ public class Battleship extends Application {
                             button.setText(" x ");
                         }
                         
-                        String aiTarget = ai.hitRandomShip(aiBoard, aiMarked);
+                        String aiTarget = ai.hitShip(aiBoard, aiMarked);
                         aiMarked.remove(aiTarget);
                         if (aiBoard.hasShipAt(aiTarget)) {
                             aiGrid.lookup("#"+aiTarget).getStyleClass().removeAll("used");
@@ -143,7 +143,6 @@ public class Battleship extends Application {
                             }
                         }
                         else {
-                            aiGrid.lookup("#"+aiTarget).getStyleClass().removeAll("ai");
                             aiGrid.lookup("#"+aiTarget).getStyleClass().add("aimiss");
                         }
                     }
