@@ -103,5 +103,13 @@ public class ShipList {
         ships.values().forEach(ship -> all.addAll(ship.getPostition()));
         return all;
     }
-    
+    public boolean areAllSunk() {
+        boolean allSunk = true;
+        for (Ship ship : ships.values()) {
+            if (!ship.isSunk()) {
+                allSunk = false;
+            }
+        }
+        return allSunk;
+    }
 }

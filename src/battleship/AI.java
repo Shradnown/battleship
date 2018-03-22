@@ -224,7 +224,6 @@ public class AI {
             }
             
             newTarget = String.valueOf((char) (lastHit.charAt(0))) + String.valueOf((lastHitRow - 1));
-            System.out.println("newtarget at up :" + newTarget);
             if (remaining.contains(newTarget)) {
                 return newTarget;
             }

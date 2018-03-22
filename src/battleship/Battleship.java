@@ -13,7 +13,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -22,7 +21,7 @@ import javafx.stage.Stage;
  * @author User
  */
 public class Battleship extends Application {
-    
+    private boolean gameEnd = false;
     @Override
     public void start(Stage primaryStage) {
         
@@ -91,7 +90,6 @@ public class Battleship extends Application {
                 column++;
             }
         }
-            
         
         for (int r = 0; r<10;r++){
             char column = 'A';
@@ -101,49 +99,60 @@ public class Battleship extends Application {
                 button.setId(buttonID);
                 button.getStyleClass().add("unused");
                 button.setOnAction((ActionEvent e) -> {
-                    String buttonCoordinate = ((Button) e.getSource()).getId();
-                    if (!marked.contains(buttonCoordinate)) {
-                        
-                        marked.add(buttonCoordinate);
-                        boolean sunk;
-                        if (shipList.hasShipAt(buttonCoordinate)) {
-                            
-                            sunk = shipList.hit(buttonCoordinate);
-                            button.getStyleClass().removeAll("unused");
-                            button.getStyleClass().add("hit");
-                            button.setText(" X ");
-                            if (sunk) {
-                                Ship sunkShip = shipList.getShipAt(buttonCoordinate);
-                                for (String string : sunkShip.getPostition()) {
-                                    grid.lookup("#" + string).getStyleClass().removeAll("hit");
-                                    grid.lookup("#" + string).getStyleClass().add("broken");
-                                    ((Button)grid.lookup("#" + string)).setText("[ ]");
+                    if (!gameEnd) {
+                        String buttonCoordinate = ((Button) e.getSource()).getId();
+                        if (!marked.contains(buttonCoordinate)) {
+
+                            marked.add(buttonCoordinate);
+                            boolean sunk;
+                            if (shipList.hasShipAt(buttonCoordinate)) {
+
+                                sunk = shipList.hit(buttonCoordinate);
+                                button.getStyleClass().removeAll("unused");
+                                button.getStyleClass().add("hit");
+                                button.setText(" X ");
+                                if (sunk) {
+                                    Ship sunkShip = shipList.getShipAt(buttonCoordinate);
+                                    for (String string : sunkShip.getPostition()) {
+                                        grid.lookup("#" + string).getStyleClass().removeAll("hit");
+                                        grid.lookup("#" + string).getStyleClass().add("broken");
+                                        ((Button)grid.lookup("#" + string)).setText("[ ]");
+                                    }
+                                    System.out.println("You sunk my " + sunkShip + "!");
                                 }
-                                System.out.println("You sunk my " + sunkShip + "!");
                             }
-                        }
-                        else {
-                            button.getStyleClass().removeAll("unused");
-                            button.getStyleClass().add("miss");
-                            button.setText(" x ");
-                        }
-                        
-                        String aiTarget = ai.hitShip(aiBoard, aiMarked);
-                        aiMarked.remove(aiTarget);
-                        if (aiBoard.hasShipAt(aiTarget)) {
-                            aiGrid.lookup("#"+aiTarget).getStyleClass().removeAll("used");
-                            aiGrid.lookup("#"+aiTarget).getStyleClass().add("aihit");
-                            Ship aiShip = aiBoard.getShipAt(aiTarget);
-                            if (aiShip.isSunk()) {
-                                for (String string : aiShip.getPostition()) {
-                                    aiGrid.lookup("#"+string).getStyleClass().removeAll("aihit");
-                                    aiGrid.lookup("#"+string).getStyleClass().add("aisunk");
+                            else {
+                                button.getStyleClass().removeAll("unused");
+                                button.getStyleClass().add("miss");
+                                button.setText(" x ");
+                            }
+
+                            if (shipList.areAllSunk()) {
+                                System.out.println("You won!");
+                                endGame();
+                            }
+
+                            String aiTarget = ai.hitShip(aiBoard, aiMarked);
+                            aiMarked.remove(aiTarget);
+                            if (aiBoard.hasShipAt(aiTarget)) {
+                                aiGrid.lookup("#"+aiTarget).getStyleClass().removeAll("used");
+                                aiGrid.lookup("#"+aiTarget).getStyleClass().add("aihit");
+                                Ship aiShip = aiBoard.getShipAt(aiTarget);
+                                if (aiShip.isSunk()) {
+                                    for (String string : aiShip.getPostition()) {
+                                        aiGrid.lookup("#"+string).getStyleClass().removeAll("aihit");
+                                        aiGrid.lookup("#"+string).getStyleClass().add("aisunk");
+                                    }
+                                    System.out.println("Your " + aiBoard.getShipAt(aiTarget) + " has been sunk!");
                                 }
-                                System.out.println("Your " + aiBoard.getShipAt(aiTarget) + " has been sunk!");
                             }
-                        }
-                        else {
-                            aiGrid.lookup("#"+aiTarget).getStyleClass().add("aimiss");
+                            else {
+                                aiGrid.lookup("#"+aiTarget).getStyleClass().add("aimiss");
+                            }
+                            if (aiBoard.areAllSunk()) {
+                                System.out.println("You lost!");
+                                endGame();
+                            }
                         }
                     }
                 }); //Buttonevent
@@ -152,38 +161,8 @@ public class Battleship extends Application {
                 column++;
             }
         }
-        /*
-        GridPane aiGrid = new GridPane();
-        aiGrid.setAlignment(Pos.BASELINE_CENTER);
-        aiGrid.setHgap(10);
-        aiGrid.setVgap(10);
-        aiGrid.setPadding(new Insets(25, 25, 25, 25));
-        aiGrid.getStylesheets().add(Battleship.class.getResource("Battleship.css").toExternalForm());
-        
-        for (int r = 0; r < 10; r++) {
-            char column = 'A';
-            for (int c = 0; c < 10; c++) {
-                String squareID = String.valueOf(column) + String.valueOf(r + 1);
-                aiMarked.add(squareID);
-                Button aiButton = new Button();
-                if(aiBoard.hasShipAt(squareID)) {
-                    aiButton.getStyleClass().add("used");
-                }
-                else {
-                    aiButton.getStyleClass().add("ai");
-                }
-                
-                aiGrid.add(aiButton,c,r);
-                column++;
-            }
-        }
-        */
-            
-            
         
         Scene testScene = new Scene(placement);
-        
-        
         
         Button testButton = new Button("Test switch scene");
         testButton.setOnAction((ActionEvent e) -> {
@@ -229,6 +208,9 @@ public class Battleship extends Application {
      */
     public static void main(String[] args) {
         launch(args);
+    }
+    private void endGame() {
+        gameEnd = true;
     }
     
 }
