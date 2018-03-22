@@ -24,7 +24,6 @@ public class Ship {
     
     public boolean placeShip(ArrayList<String> location) {
         position.addAll(location);
-        System.out.println(position);
         placed = true;
         //location.forEach((string) -> parts.put(string, false));
         return placed;

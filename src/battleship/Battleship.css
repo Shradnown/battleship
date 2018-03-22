@@ -14,56 +14,83 @@
     -fx-text-fill: #333;
 }
 
+.button:hover {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
 .unused {
-    
     -fx-background-color: #fff;
 }
 
 .unused:hover {
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
     -fx-background-image: url("target.png");
+    -fx-background-radius: 5em;
+    -fx-effect: dropshadow(three-pass-box, rgba(200,30,30,0.5), 10, 0.3, 0, 0);
 }
 
-.used {
-    -fx-background-color: #aaa;
-}
 
-.used:hover {
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-    -fx-background-image: url("Untitled.png");
-}
 
 .hit {
+    -fx-font-size: 16px;
     -fx-background-color: #8f8;
+    -fx-effect: innershadow(three-pass-box, rgba(0,0,0,0.7), 6, 0.0, 0, 2)
 }
 
 .hit:hover {
+    -fx-font-size: 18px;
     -fx-background-color: #7e7;
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-    
 }
 
 .miss {
     -fx-background-color: #f88;
+    -fx-effect: innershadow(three-pass-box, rgba(0,0,0,0.7), 6, 0.0, 0, 2)
 }
 
 .miss:hover {
     -fx-background-color: #e77;
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
     
 }
 
 .broken {
     -fx-background-color: #88f;
+    -fx-effect: innershadow(three-pass-box, rgba(0,0,0,0.7), 6, 0.0, 0, 2)
 }
 
 .broken:hover {
     -fx-background-color: #77e;
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
     
+}
+
+.used {
+    -fx-pref-width: 30;
+    -fx-pref-height: 30;
+    -fx-background-color: #9aa;
+    -fx-font-size: 12px;
+}
+
+.ai {
+    -fx-pref-width: 30;
+    -fx-pref-height: 30;
+    -fx-background-color: #fff;
+}
+
+.aihit {
+    -fx-pref-width: 30;
+    -fx-pref-height: 30;
+    -fx-background-color: #8f8;
+    -fx-effect: innershadow(three-pass-box, rgba(0,0,0,0.7), 6, 0.0, 0, 2)
+}
+
+.aimiss {
+    -fx-pref-width: 30;
+    -fx-pref-height: 30;
+    -fx-background-color: #f88;
+    -fx-effect: innershadow(three-pass-box, rgba(0,0,0,0.7), 6, 0.0, 0, 2)
+}
+.aisunk {
+    -fx-background-color: #88f;
+    -fx-pref-width: 30;
+    -fx-pref-height: 30;
+    -fx-effect: innershadow(three-pass-box, rgba(0,0,0,0.7), 6, 0.0, 0, 2)
 }

@@ -55,8 +55,6 @@ public class AI {
                     return true;
                 }
             }
-            System.out.println(start);
-            System.out.println("Test");
             if ((int)startColumn >= 64+shipSize) {
                 ArrayList<String> shipLocation = new ArrayList<>();
                 shipLocation.add(start);
@@ -167,5 +165,26 @@ public class AI {
         return shipLocation.stream().noneMatch(string -> (shipList.getAll().contains(string)));
     }
     
+    public String hitRandomShip(ShipList shipList, ArrayList<String> remaining) {
+        if (remaining.isEmpty()) {
+            return null;
+        }
+        while (true) {
+            char column = (char)((int)(Math.random()*10)+65);
+            int row = (int)(Math.random()*10)+1;
+            String target = String.valueOf(column) + String.valueOf(row);
+            
+            if (remaining.contains(target)) {
+                if (shipList.hasShipAt(target)) {
+                    shipList.hit(target);
+                    return target;
+                }
+                else {
+                    return target;
+                }
+            }
+        }
+        
+    }
     
 }
