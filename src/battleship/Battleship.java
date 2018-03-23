@@ -235,7 +235,9 @@ public class Battleship extends Application {
                                     }
                                     System.out.println("You sunk my " + sunkShip + "!");
                                     vbShipsLeft.getChildren().remove(vbShipsLeft.lookup("#"+sunkShip.toString()));
-                                    vbShipsDestroyed.getChildren().add(new Text(sunkShip.toString() + " (" + sunkShip.getPostition().size() + ")"));
+                                    Text temp = new Text(sunkShip.toString() + " (" + sunkShip.getPostition().size() + ")");
+                                    temp.getStyleClass().add("text");
+                                    vbShipsDestroyed.getChildren().add(temp);
                                     
                                     
                                 }

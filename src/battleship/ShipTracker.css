@@ -2,8 +2,9 @@
     Created on : Mar 23, 2018, 9:37:38 AM
     Author     : Erik
 */
+
 .text {
-    -fx-fill: #333;
+    -fx-fill: #333a3a;
     -fx-font-size: 14px;
 }
 .titletext {
