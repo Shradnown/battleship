@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author User
+ * @author Erik
  */
 public class Ship {
     

@@ -4,11 +4,12 @@ import java.util.ArrayList;
 
 /**
  *
- * @author User
+ * @author Erik
  */
 public class AI {
     private String firstHit = null;
     private String lastHit = null;
+    private ArrayList<String> hits = new ArrayList<>();
 
     public boolean autoPlaceShip(ShipList shipList, int shipSize) {
         if (shipList.isShipPlaced(shipSize)) {
@@ -191,17 +192,26 @@ public class AI {
             String target = testNextGuess(remaining);
             Boolean sunk = shipList.hit(target);
             if (sunk) {
-                firstHit = null;
-                lastHit = null;
+                hits.removeAll(shipList.getShipAt(target).getPostition());
+                if (hits.isEmpty()) {
+                    firstHit = null;
+                    lastHit = null;
+                }
+                else {
+                    firstHit = hits.get(0);
+                    lastHit = hits.get(hits.size()-1);
+                }
             }
             else if (shipList.hasShipAt(target)) {
                 lastHit = target;
+                hits.add(target);
             }
             return target;
         }
         
         String target = hitRandomShip(shipList, remaining);
         if (shipList.hasShipAt(target)) {
+            hits.add(target);
             firstHit = target;
             lastHit = target;
         }
@@ -243,7 +253,19 @@ public class AI {
             if (remaining.contains(newTarget)) {
                 return newTarget;
             }
-            newTarget = String.valueOf((char) (firstHit.charAt(0) - 1)) + String.valueOf(lastHitRow);
+            newTarget = String.valueOf((char) (firstHit.charAt(0) - 1)) + String.valueOf(firstHitRow);
+            if (remaining.contains(newTarget)) {
+                return newTarget;
+            }
+            newTarget = String.valueOf((char) (firstHit.charAt(0))) + String.valueOf(firstHitRow + 1);
+            if (remaining.contains(newTarget)) {
+                return newTarget;
+            }
+            newTarget = String.valueOf((char) (firstHit.charAt(0))) + String.valueOf(firstHitRow - 1);
+            if (remaining.contains(newTarget)) {
+                return newTarget;
+            }
+            
             return newTarget;
         }
         
@@ -257,6 +279,18 @@ public class AI {
                 return newTarget;
             }
             newTarget = String.valueOf((char) (firstHit.charAt(0))) + String.valueOf(firstHitRow -1);
+            if (remaining.contains(newTarget)) {
+                return newTarget;
+            }
+            newTarget = String.valueOf((char) (firstHit.charAt(0) + 1)) + String.valueOf(firstHitRow);
+            if (remaining.contains(newTarget)) {
+                return newTarget;
+            }
+            newTarget = String.valueOf((char) (firstHit.charAt(0) - 1)) + String.valueOf(firstHitRow);
+            if (remaining.contains(newTarget)) {
+                return newTarget;
+            }
+            
             return newTarget;
         }
         System.out.println("Something is very wrong");

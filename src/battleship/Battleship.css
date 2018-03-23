@@ -1,6 +1,6 @@
 /* 
     Created on : Mar 20, 2018, 1:33:46 PM
-    Author     : User
+    Author     : Erik
 */
 
 .root {
@@ -93,4 +93,16 @@
     -fx-pref-width: 30;
     -fx-pref-height: 30;
     -fx-effect: innershadow(three-pass-box, rgba(0,0,0,0.7), 6, 0.0, 0, 2)
+}
+
+.winText {
+    -fx-font-size: 48px;
+    -fx-font-weight: bold;
+    -fx-fill: green;
+}
+
+.loseText {
+    -fx-font-size: 48px;
+    -fx-font-weight: bold;
+    -fx-fill: red;
 }

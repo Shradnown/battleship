@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 /**
  *
- * @author User
+ * @author Erik
  */
 public class ShipList {
     HashMap<String, Ship> ships;

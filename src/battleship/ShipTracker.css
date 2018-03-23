@@ -1,0 +1,11 @@
+/* 
+    Created on : Mar 23, 2018, 9:37:38 AM
+    Author     : Erik
+*/
+.text {
+    -fx-font-size: 16px;
+}
+.titletext {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
