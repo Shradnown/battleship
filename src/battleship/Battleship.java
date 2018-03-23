@@ -26,11 +26,18 @@ public class Battleship extends Application {
     public void start(Stage primaryStage) {
         
         GridPane placement = new GridPane();
+        
+        Scene placementScene = new Scene(placement);
+        placementScene.getStylesheets().add(Battleship.class.getResource("PlacementMenu.css").toExternalForm());
+        
+        ShipList aiBoard = new ShipList();
+        ArrayList<String> placeMarks = new ArrayList<>();
+        
         placement.setAlignment(Pos.BASELINE_CENTER);
         placement.setHgap(10);
         placement.setVgap(10);
         placement.setPadding(new Insets(25, 25, 25, 25));
-        placement.getStylesheets().add(Battleship.class.getResource("Battleship.css").toExternalForm());
+        //placement.getStylesheets().add(Battleship.class.getResource("Battleship.css").toExternalForm());
         for (int r = 0; r<10;r++){
             char column = 'A';
             for (int c = 0; c<10;c++) {
@@ -38,35 +45,105 @@ public class Battleship extends Application {
                 Button button = new Button(buttonID);
                 button.setId(buttonID);
                 
-                button.setOnMouseEntered((MouseEvent e) -> {
-                    button.setText("Hovering");
+                button.setOnAction((ActionEvent e) -> {
+                    if (!aiBoard.hasShipAt(buttonID) && placeMarks.size()<5){
+                        if (placeMarks.contains(buttonID)) {
+                            placeMarks.remove(buttonID);
+                            button.getStyleClass().remove("marked");
+                        }
+                        else {
+                            placeMarks.add(buttonID);
+                            button.getStyleClass().add("marked");
+                        }
+                    }
                 });
-                button.setOnMouseExited((MouseEvent e) -> {
-                    button.setText(buttonID);
-                });
+                
                 placement.add(button,c,r);
                 column++;
             }
-            
         }
         
+        Text placeinfo = new Text("Place one ship at a time");
         
         
-        GridPane grid = new GridPane();
-        grid.setAlignment(Pos.BASELINE_CENTER);
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(25, 25, 25, 25));
+        Button submit = new Button("Confirm Location");
+        submit.getStyleClass().add("sidebutton");
+        submit.setOnAction((ActionEvent e) -> {
+            boolean placed = aiBoard.placeShip(placeMarks);
+            if (placed) {
+                for (String string : placeMarks) {
+                    placement.lookup("#" + string).getStyleClass().remove("marked");
+                    placement.lookup("#" + string).getStyleClass().add("placed");
+                }
+                placeMarks.clear();
+                System.out.println("Ship Placed");
+                
+                if (aiBoard.areAllPlaced()) {
+                    startgame(primaryStage, aiBoard);
+                }
+            }
+            else {
+                System.out.println("Invalid Location");
+            }
+        });
         
-        ArrayList<String> marked = new ArrayList<>();
-        AI ai = new AI();
+        Button autoPlace = new Button("Autoplace ships");
+        autoPlace.getStyleClass().add("sidebutton");
+        autoPlace.setOnAction((ActionEvent e) -> {
+            AI ai = new AI();
+            ai.autoPlaceAll(aiBoard);
+            startgame(primaryStage, aiBoard);
+        });
+        placement.add(placeinfo, 11, 0);
+        placement.add(submit, 11, 1);
+        placement.add(autoPlace, 11, 2);
         
-        ShipList shipList = new ShipList();
-        ai.autoPlaceAll(shipList);
+        Text shipsLeft = new Text("Ships left to place:");
+        shipsLeft.getStyleClass().add("titletext");
+        Text carrier = new Text("Carrier (5)");
+        carrier.setId("Carrier");
+        carrier.getStyleClass().add("text");
+        Text battleship = new Text("Battleship (4)");
+        battleship.setId("Battleship");
+        battleship.getStyleClass().add("text");
+        Text cruiser = new Text("Cruiser (3)");
+        cruiser.setId("Cruiser");
+        cruiser.getStyleClass().add("text");
+        Text submarine = new Text("Submarine (3)");
+        submarine.setId("Submarine");
+        submarine.getStyleClass().add("text");
+        Text destroyer = new Text("Destroyer (2)");
+        destroyer.setId("Destroyer");
+        destroyer.getStyleClass().add("text");
         
-        ShipList aiBoard = new ShipList();
-        ArrayList<String> aiMarked = new ArrayList<>();
-        ai.autoPlaceAll(aiBoard);
+        VBox vbShipsLeft = new VBox(shipsLeft, carrier, battleship, cruiser, submarine, destroyer);
+        vbShipsLeft.getStylesheets().add(Battleship.class.getResource("ShipTracker.css").toExternalForm());
+        placement.add(vbShipsLeft, 11, 4, 1, 7);
+        
+        primaryStage.setTitle("Minigames - BattleShips");
+        primaryStage.setScene(placementScene);
+        
+        primaryStage.show();
+        
+    }
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        launch(args);
+    }
+    private void endGame() {
+        gameEnd = true;
+    }
+    
+    private void startgame(Stage primaryStage, ShipList aiBoard) {
+        GridPane playGrid = new GridPane();
+        playGrid.setAlignment(Pos.BASELINE_CENTER);
+        playGrid.setHgap(10);
+        playGrid.setVgap(10);
+        playGrid.setPadding(new Insets(25, 25, 25, 25));
+        playGrid.getStylesheets().add(Battleship.class.getResource("Battleship.css").toExternalForm());
         
         GridPane aiGrid = new GridPane();
         aiGrid.setAlignment(Pos.BASELINE_CENTER);
@@ -75,6 +152,13 @@ public class Battleship extends Application {
         aiGrid.setPadding(new Insets(25, 25, 25, 25));
         aiGrid.getStylesheets().add(Battleship.class.getResource("AI.css").toExternalForm());
         
+        ArrayList<String> marked = new ArrayList<>();
+        AI ai = new AI();
+        
+        ShipList shipList = new ShipList();
+        ai.autoPlaceAll(shipList);
+        ArrayList<String> aiMarked = new ArrayList<>();
+        
         Text shipsLeft = new Text("Ships left:");
         shipsLeft.getStyleClass().add("titletext");
         Text shipsDestroyed = new Text("Ships Destroyed:");
@@ -82,20 +166,25 @@ public class Battleship extends Application {
         
         Text carrier = new Text("Carrier (5)");
         carrier.setId("Carrier");
+        carrier.getStyleClass().add("text");
         Text battleship = new Text("Battleship (4)");
         battleship.setId("Battleship");
+        battleship.getStyleClass().add("text");
         Text cruiser = new Text("Cruiser (3)");
         cruiser.setId("Cruiser");
+        cruiser.getStyleClass().add("text");
         Text submarine = new Text("Submarine (3)");
         submarine.setId("Submarine");
+        submarine.getStyleClass().add("text");
         Text destroyer = new Text("Destroyer (2)");
         destroyer.setId("Destroyer");
+        destroyer.getStyleClass().add("text");
         
         VBox vbShipsLeft = new VBox(shipsLeft, carrier, battleship, cruiser, submarine, destroyer);
-        grid.add(vbShipsLeft, 11, 0, 1, 3);
-        
+        playGrid.add(vbShipsLeft, 11, 0, 1, 3);
         VBox vbShipsDestroyed = new VBox(shipsDestroyed);
-        grid.add(vbShipsDestroyed, 11, 4, 1, 3);
+        playGrid.add(vbShipsDestroyed, 11, 4, 1, 3);
+        
         vbShipsLeft.getStylesheets().add(Battleship.class.getResource("ShipTracker.css").toExternalForm());
         vbShipsDestroyed.getStylesheets().add(Battleship.class.getResource("ShipTracker.css").toExternalForm());
         
@@ -140,12 +229,11 @@ public class Battleship extends Application {
                                 if (sunk) {
                                     Ship sunkShip = shipList.getShipAt(buttonCoordinate);
                                     for (String string : sunkShip.getPostition()) {
-                                        grid.lookup("#" + string).getStyleClass().removeAll("hit");
-                                        grid.lookup("#" + string).getStyleClass().add("broken");
-                                        ((Button)grid.lookup("#" + string)).setText("[ ]");
+                                        playGrid.lookup("#" + string).getStyleClass().removeAll("hit");
+                                        playGrid.lookup("#" + string).getStyleClass().add("broken");
+                                        ((Button)playGrid.lookup("#" + string)).setText("[ ]");
                                     }
                                     System.out.println("You sunk my " + sunkShip + "!");
-                                    //((Text) grid.lookup("#" + sunkShip.toString())).setText("");
                                     vbShipsLeft.getChildren().remove(vbShipsLeft.lookup("#"+sunkShip.toString()));
                                     vbShipsDestroyed.getChildren().add(new Text(sunkShip.toString() + " (" + sunkShip.getPostition().size() + ")"));
                                     
@@ -163,7 +251,8 @@ public class Battleship extends Application {
                                 endGame();
                                 Text winText = new Text("You Won!");
                                 winText.getStyleClass().add("winText");
-                                aiGrid.add(winText, 0, 11, 5, 5);
+                                aiGrid.add(winText, 0, 11, 7, 5);
+                                
                             }
                             if (!gameEnd){
                                 String aiTarget = ai.hitShip(aiBoard, aiMarked);
@@ -188,93 +277,23 @@ public class Battleship extends Application {
                                     endGame();
                                     Text loseText = new Text("You Lost!");
                                     loseText.getStyleClass().add("loseText");
-                                    aiGrid.add(loseText, 0, 11, 5, 5);
+                                    aiGrid.add(loseText, 0, 11, 7, 5);
                                 }
                             }
                         }
                     }
                 }); //Buttonevent
                 
-                grid.add(button,c,r);
+                playGrid.add(button,c,r);
                 column++;
             }
+        
         }
-        
-        /*
-        
-        Text shipsLeft = new Text("Ships left: (Logic not yet implemented)");
-        Text carrier = new Text("Carrier (5)");
-        carrier.setId("Carrier");
-        Text battleship = new Text("Battleship (4)");
-        battleship.setId("Battleship");
-        Text cruiser = new Text("Cruiser (3)");
-        cruiser.setId("Cruiser");
-        Text submarine = new Text("Submarine (3)");
-        submarine.setId("Submarine");
-        Text destroyer = new Text("Destroyer (2)");
-        destroyer.setId("Destroyer");
-        
-        VBox vbShips = new VBox(carrier, battleship, cruiser, submarine, destroyer);
-        grid.add(vbShips, 11, 0);
-        */
-        
-        /*
-        Scene testScene = new Scene(placement);
-        
-        Button testButton = new Button("Test switch scene");
-        testButton.setOnAction((ActionEvent e) -> {
-            primaryStage.setScene(testScene);
-        });
-        grid.add(testButton, 0, 11);
-        */
-        /*
-        GridPane textGrid = new GridPane();
-        
-        textGrid.setAlignment(Pos.TOP_LEFT);
-        textGrid.setHgap(10);
-        textGrid.setVgap(10);
-        textGrid.setPadding(new Insets(25, 25, 25, 25));
-        textGrid.getStylesheets().add(Battleship.class.getResource("TrackerText.css").toExternalForm());
-        
-        Text shipsLeft = new Text("Ships left: (Logic not yet implemented)");
-        textGrid.add(shipsLeft, 0, 0);
-        Text carrier = new Text("Carrier (5)");
-        carrier.setId("Carrier");
-        textGrid.add(carrier, 0, 1);
-        Text battleship = new Text("Battleship (4)");
-        battleship.setId("Battleship");
-        textGrid.add(battleship, 0, 2);
-        Text cruiser = new Text("Cruiser (3)");
-        cruiser.setId("Cruiser");
-        textGrid.add(cruiser, 0, 3);
-        Text submarine = new Text("Submarine (3)");
-        submarine.setId("Submarine");
-        textGrid.add(submarine, 0, 4);
-        Text destroyer = new Text("Destroyer (2)");
-        destroyer.setId("Destroyer");
-        textGrid.add(destroyer, 0, 5);
-        Text shipsDestroyed = new Text("Ships destroyed: ");
-        textGrid.add(shipsDestroyed, 0, 6);
-        */
-        
-        HBox hbox = new HBox(grid, aiGrid);
+        HBox hbox = new HBox(playGrid, aiGrid);
         Scene scene = new Scene(hbox);
-        
-        primaryStage.setTitle("Minigames - BattleShips");
-        primaryStage.setScene(scene);
         scene.getStylesheets().add(Battleship.class.getResource("Battleship.css").toExternalForm());
+        primaryStage.setScene(scene);
         primaryStage.show();
-        
-    }
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        launch(args);
-    }
-    private void endGame() {
-        gameEnd = true;
     }
     
 }

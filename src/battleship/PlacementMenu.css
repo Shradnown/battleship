@@ -1,0 +1,46 @@
+/* 
+    Created on : Mar 23, 2018, 3:18:54 PM
+    Author     : Erik
+*/
+
+.root {
+    -fx-background-color: #dddde3;
+}
+
+.button{
+    -fx-pref-width: 48;
+    -fx-pref-height: 48;
+    -fx-font-size: 12px;
+    -fx-text-fill: #333;
+    -fx-background-color: #fff;
+}
+
+.button:hover {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.hovermark {
+    -fx-background-color: #eeefef;
+    -fx-effect: dropshadow(three-pass-box, rgba(40,40,50,0.5), 10, 0.3, 0, 0);
+}
+
+
+.marked {
+    -fx-effect: dropshadow(three-pass-box, rgba(30,80,80,0.5), 10, 0.3, 0, 0);
+    -fx-border-color: #577;
+    -fx-border-radius: 3px;
+    -fx-background-color: #abb;
+}
+
+.marked:hover {
+    -fx-background-color: #bcc;
+}
+
+.placed {
+    -fx-background-color: #9aa;
+}
+
+.sidebutton {
+    -fx-pref-width: 128;
+}

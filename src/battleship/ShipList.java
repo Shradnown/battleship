@@ -8,7 +8,7 @@ import java.util.HashMap;
  * @author Erik
  */
 public class ShipList {
-    HashMap<String, Ship> ships;
+    private HashMap<String, Ship> ships;
 
     public ShipList() {
         ships = new HashMap<>();
@@ -20,33 +20,78 @@ public class ShipList {
     }
     
     public boolean placeShip(ArrayList<String> location) {
-        switch (location.size()) {
-            case 2:
-                ships.get("destroyer").placeShip(location);
-                break;
-            case 3:
-                if (!ships.get("cruiser").isPlaced()) {
-                    ships.get("cruiser").placeShip(location);
+        
+        if (!location.stream().noneMatch((string) -> (hasShipAt(string)))) {
+            return false;
+        }
+        
+        if (validPlacement(location)) {
+            location.sort(null);
+            switch (location.size()) {
+                case 2:
+                    ships.get("destroyer").placeShip(location);
+                    break;
+                case 3:
+                    if (!ships.get("cruiser").isPlaced()) {
+                        ships.get("cruiser").placeShip(location);
+                    } else {
+                        ships.get("submarine").placeShip(location);
+                    }
+                    break;
+                case 4:
+                    ships.get("battleship").placeShip(location);
+                    break;
+                case 5:
+                    ships.get("carrier").placeShip(location);
+                    break;
+                default:
+                    return false;
+            }
+            return true;
+        }
+        return false;
+    }
+    
+    private boolean validPlacement(ArrayList<String> location) {
+        if (location.size()>0 && location.size()<6) {
+            if (!isShipPlaced(location.size())) {
+                if (location.get(0).charAt(0) == location.get(1).charAt(0)) {
+                    if (!location.stream().noneMatch((string) -> (string.charAt(0) != location.get(0).charAt(0)))) {
+                        return false;
+                    }
+                }
+                else if (location.get(0).substring(1).equals(location.get(1).substring(1))) {
+                    if (!location.stream().noneMatch((string) -> (!string.substring(1).equals(location.get(0).substring(1))))) {
+                        return false;
+                    }
                 }
                 else {
-                    ships.get("submarine").placeShip(location);
+                    return false;
                 }
-                break;
-            case 4:
-                ships.get("battleship").placeShip(location);
-                break;
-            case 5:
-                ships.get("carrier").placeShip(location);
-                break;
-            default:
-                return false;
-                
+                return location.stream().noneMatch((string) -> (hasShipAt(string)));
+            }
         }
-        return true;
+        return false;
     }
     
     public boolean isShipPlaced(String Name) {
         return ships.get(Name).isPlaced();
+    }
+    
+    public boolean areAllPlaced(){
+        if (!ships.get("carrier").isPlaced()) {
+            return false;
+        }
+        if (!ships.get("battleship").isPlaced()) {
+            return false;
+        }
+        if (!ships.get("cruiser").isPlaced()) {
+            return false;
+        }
+        if (!ships.get("submarine").isPlaced()) {
+            return false;
+        }
+        return ships.get("destroyer").isPlaced();
     }
     
     public boolean isShipPlaced(int size) {
@@ -68,6 +113,7 @@ public class ShipList {
                 return false;
         }
     }
+    
     
     public boolean hasShipAt(String coordinate) {
         for (Ship ship : ships.values()) {

@@ -145,17 +145,21 @@ public class AI {
     }
 
     public boolean autoPlaceAll(ShipList shipList) {
-        if (shipList.isShipPlaced(5)) {
+        if (shipList.areAllPlaced()) {
             return false;
         } else {
+            
             int[] ships = {5, 4, 3, 3, 2};
+            
             for (int i = 0; i < ships.length; i++) {
                 int direction = (int) (Math.random() * 2);
-
-                if (direction == 0) {
-                    autoPlaceShipHorizontal(shipList, ships[i]);
-                } else {
-                    autoPlaceShipVertical(shipList, ships[i]);
+                if (!shipList.isShipPlaced(ships[i])) {
+                    if (direction == 0) {
+                        autoPlaceShipHorizontal(shipList, ships[i]);
+                    }
+                    else {
+                        autoPlaceShipVertical(shipList, ships[i]);
+                    }
                 }
             }
             return true;
