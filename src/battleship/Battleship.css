@@ -14,7 +14,7 @@
     -fx-text-fill: #333;
 }
 
-.button:hover {
+.button:focused {
     -fx-font-size: 14px;
     -fx-font-weight: bold;
 }
@@ -23,13 +23,11 @@
     -fx-background-color: #fff;
 }
 
-.unused:hover {
+.unused:focused {
     -fx-background-image: url("target.png");
     -fx-background-radius: 5em;
     -fx-effect: dropshadow(three-pass-box, rgba(200,30,30,0.5), 10, 0.3, 0, 0);
 }
-
-
 
 .hit {
     -fx-font-size: 16px;
@@ -37,7 +35,7 @@
     -fx-effect: innershadow(three-pass-box, rgba(0,0,0,0.7), 6, 0.0, 0, 2)
 }
 
-.hit:hover {
+.hit:focused {
     -fx-font-size: 18px;
     -fx-background-color: #7e7;
 }
@@ -47,7 +45,7 @@
     -fx-effect: innershadow(three-pass-box, rgba(0,0,0,0.7), 6, 0.0, 0, 2)
 }
 
-.miss:hover {
+.miss:focused {
     -fx-background-color: #e77;
     
 }
@@ -57,7 +55,7 @@
     -fx-effect: innershadow(three-pass-box, rgba(0,0,0,0.7), 6, 0.0, 0, 2)
 }
 
-.broken:hover {
+.broken:focused {
     -fx-background-color: #77e;
     
 }

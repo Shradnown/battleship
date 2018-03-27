@@ -8,6 +8,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -37,7 +39,6 @@ public class Battleship extends Application {
         placement.setHgap(10);
         placement.setVgap(10);
         placement.setPadding(new Insets(25, 25, 25, 25));
-        //placement.getStylesheets().add(Battleship.class.getResource("Battleship.css").toExternalForm());
         for (int r = 0; r<10;r++){
             char column = 'A';
             for (int c = 0; c<10;c++) {
@@ -126,7 +127,7 @@ public class Battleship extends Application {
         primaryStage.show();
         
     }
-
+    
     /**
      * @param args the command line arguments
      */
@@ -213,6 +214,12 @@ public class Battleship extends Application {
                 Button button = new Button(buttonID);
                 button.setId(buttonID);
                 button.getStyleClass().add("unused");
+                button.setOnMouseEntered((MouseEvent e) -> button.requestFocus());
+                button.setOnKeyPressed((KeyEvent e) -> {
+                        if (button.isFocused() && (e.getCode() == KeyCode.ENTER || e.getCode() == KeyCode.SPACE)) {
+                            button.fire();
+                        }
+                });
                 button.setOnAction((ActionEvent e) -> {
                     if (!gameEnd) {
                         String buttonCoordinate = ((Button) e.getSource()).getId();
@@ -254,6 +261,7 @@ public class Battleship extends Application {
                                 Text winText = new Text("You Won!");
                                 winText.getStyleClass().add("winText");
                                 aiGrid.add(winText, 0, 11, 7, 5);
+                                Button restart = new Button("Restart");
                                 
                             }
                             if (!gameEnd){
